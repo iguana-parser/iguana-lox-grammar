@@ -1,0 +1,79 @@
+grammar Lox
+
+// Lox, the language of Crafting Interpreters by Robert
+// Nystrom. The grammar follows the book's Appendix I:
+// https://craftinginterpreters.com/appendix-i.html
+
+Program = Declaration*
+
+Declaration
+  = "class" Id ("<" Id)? "{" Function* "}"
+  | "fun" Function
+  | VarDecl
+  | Statement
+
+Function = Id "(" {Id ","}* ")" Block
+
+VarDecl = "var" Id ("=" Expr)? ";"
+
+Statement
+  = Expr ";"
+  | "for" "(" (VarDecl | Expr ";" | ";") Expr? ";" Expr?
+      ")" Statement
+  | "if" "(" Expr ")" Statement !>>> Else
+  | "if" "(" Expr ")" Statement "else" Statement
+  | "print" Expr ";"
+  | "return" Expr? ";"
+  | "while" "(" Expr ")" Statement
+  | Block
+
+Block = "{" Declaration* "}"
+
+Expr
+  =       Expr "(" {Expr ","}* ")"
+  |       Expr "." Id
+  |       "true"
+  |       "false"
+  |       "nil"
+  |       "this"
+  |       Number
+  |       String
+  |       Id
+  |       "(" Expr ")"
+  |       "super" "." Id
+  >       "!" Expr
+  |       "-" Expr
+  > left  Expr "*" Expr
+  |       Expr "/" Expr
+  > left  Expr "+" Expr
+  |       Expr "-" Expr
+  > left  Expr ">" Expr
+  |       Expr ">=" Expr
+  |       Expr "<" Expr
+  |       Expr "<=" Expr
+  > left  Expr "==" Expr
+  |       Expr "!=" Expr
+  > left  Expr "and" Expr
+  > left  Expr "or" Expr
+  > right Expr "=" Expr
+
+@Identifier @Regex
+Id = [a-zA-Z_] [a-zA-Z_0-9]* \ Keyword
+
+@Regex
+Keyword
+  = "and" | "class" | "else" | "false" | "for" | "fun"
+  | "if" | "nil" | "or" | "print" | "return" | "super"
+  | "this" | "true" | "var" | "while"
+
+@Regex
+Else = "else"
+
+@Regex
+Number = [0-9]+ ([.] [0-9]+)?
+
+@Regex
+String = ["] !["]* ["]
+
+@Layout @Regex
+Layout = ([\ \t\r\n] | "//" ![\n]*)*
