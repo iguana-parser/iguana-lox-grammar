@@ -6,10 +6,10 @@ use iguana_runtime::{
     dfa::{Dfa, State},
     ids::TerminalId,
     input::Input,
-    scanner::{Lookup, MatchAnyMemo, MatchMemo, Scanner, TerminalSet},
+    prediction::{AlternativeSet, Prediction},
+    scanner::{Lookup, MatchMemo, Scanner, TerminalSet},
 };
 const MATCH_MEMO_WORDS: usize = 1;
-const MATCH_ANY_SET_WORDS: usize = 1;
 static DFA_0: Dfa = Dfa::new(&[
     State::new(
         &[
@@ -1091,6 +1091,10 @@ static DFA_41: Dfa = Dfa::new(&[
     ),
     State::new(&[], Some(TerminalId(41))),
 ]);
+// Indexed by terminal id. `TERMINAL_FIRST_CHARS[t]` holds the characters that can begin a
+// match of the terminal `t`. A nullable terminal can match at every position, so its entry
+// holds every character. `match_token` tests the character at a position against it before
+// it matches the terminal.
 static TERMINAL_FIRST_CHARS: [CharSet; 44] = [
     CharSet::new(0x7fffffe87fffffe0000000000000000, &[]),
     CharSet::new(0xddc26a000000000000000000000000, &[]),
@@ -1149,7 +1153,7 @@ static TERMINAL_FIRST_CHARS: [CharSet; 44] = [
     ),
     CharSet::new(0x0, &[]),
 ];
-static MATCH_ANY_FIRST_CHARS: [CharSet; 16] = [
+static MATCH_ANY_FIRST_CHARS: [CharSet; 40] = [
     CharSet::new(
         0xffffffffffffffffffffffffffffffff,
         &[CharRange {
@@ -1244,22 +1248,226 @@ static MATCH_ANY_FIRST_CHARS: [CharSet; 16] = [
         }],
     ),
     CharSet::new(0x0, &[]),
+    CharSet::new(0x8000000000000000000000000000000, &[]),
+    CharSet::new(0x20000000000000000000000000000000, &[]),
+    CharSet::new(0x20000000000, &[]),
+    CharSet::new(0x800000000000000, &[]),
+    CharSet::new(
+        0xffffffffffffffffffffffffffffffff,
+        &[CharRange {
+            start: '\u{80}',
+            end: '\u{10ffff}',
+        }],
+    ),
+    CharSet::new(0x20000000000000000000000000, &[]),
+    CharSet::new(0x10000000000, &[]),
+    CharSet::new(0x400000000000, &[]),
+    CharSet::new(0x40000000000, &[]),
+    CharSet::new(0x800000000000, &[]),
+    CharSet::new(0x80000000000, &[]),
+    CharSet::new(0x200000000000, &[]),
+    CharSet::new(0x4000000000000000, &[]),
+    CharSet::new(0x4000000000000000, &[]),
+    CharSet::new(0x1000000000000000, &[]),
+    CharSet::new(0x1000000000000000, &[]),
+    CharSet::new(0x2000000000000000, &[]),
+    CharSet::new(0x200000000, &[]),
+    CharSet::new(0x2000000000000000000000000, &[]),
+    CharSet::new(0x8000000000000000000000000000, &[]),
+    CharSet::new(0x2000000000000000, &[]),
+    CharSet::new(0xffffffe87fffffe03ff210600000000, &[]),
+    CharSet::new(0x7fffffe87fffffe0000000000000000, &[]),
+    CharSet::new(0x100000000000, &[]),
+];
+static MATCH_ANY_MASKS: [[u64; MATCH_MEMO_WORDS]; 40] = [
+    [8796093022240],
+    [8798231482233],
+    [2199023255552],
+    [8798231547769],
+    [8798232006521],
+    [4],
+    [10994051037344],
+    [8796093022752],
+    [8796093022496],
+    [8796093022753],
+    [8796093034528],
+    [8796093030432],
+    [8796093087776],
+    [8798223796281],
+    [8796093095968],
+    [8796093022208],
+    [256],
+    [512],
+    [8192],
+    [65536],
+    [2130774073],
+    [524288],
+    [2048],
+    [8388608],
+    [2147483648],
+    [4294967296],
+    [8589934592],
+    [1073741824],
+    [17179869184],
+    [34359738368],
+    [128],
+    [68719476736],
+    [137438953472],
+    [274877906944],
+    [549755813888],
+    [1099511627776],
+    [32768],
+    [2138459481],
+    [1],
+    [4096],
+];
+// Indexed by ASCII character. `FIRST_CHAR_MASKS[c]` is a bitset indexed by terminal id, and
+// the bit of a terminal is set if the terminal can begin with the character `c`. It holds
+// the same information as `TERMINAL_FIRST_CHARS`, inverted. `match_any` clears the bits of
+// the terminals of a set that cannot begin with the character at a position, so
+// `match_any_untried` visits only the terminals that can match there.
+static FIRST_CHAR_MASKS: [[u64; MATCH_MEMO_WORDS]; 128] = [
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [275414777888],
+    [48],
+    [32],
+    [32],
+    [32],
+    [32],
+    [32],
+    [2080],
+    [8224],
+    [2147483680],
+    [8589934624],
+    [4128],
+    [1073741856],
+    [8388640],
+    [4294967328],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [2199023255592],
+    [32],
+    [65568],
+    [68719476896],
+    [137438986272],
+    [51539607584],
+    [32],
+    [32],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [32],
+    [32],
+    [32],
+    [32],
+    [2199023255585],
+    [32],
+    [2748779069475],
+    [2199023255585],
+    [2199023255651],
+    [2199023255585],
+    [2199023779879],
+    [2199056942115],
+    [2199023255585],
+    [2199023255585],
+    [2199023517731],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [2199090364451],
+    [3298534883363],
+    [2199024304163],
+    [2199023255585],
+    [2199025352739],
+    [2199291691043],
+    [2199174250531],
+    [2199023255585],
+    [2199023271971],
+    [2199027449891],
+    [2199023255585],
+    [2199023255585],
+    [2199023255585],
+    [288],
+    [32],
+    [544],
+    [32],
+    [32],
 ];
 pub struct LoxScanner<'i, 'arena> {
     pub input: &'i Input,
     vec_arena: &'arena Arena,
     memo: MatchMemo<'arena, MATCH_MEMO_WORDS>,
-    match_any_memo: MatchAnyMemo<'arena, MATCH_ANY_SET_WORDS>,
 }
 impl<'i, 'arena> LoxScanner<'i, 'arena> {
     pub fn new(input: &'i Input, vec_arena: &'arena Arena) -> Self {
         let memo = MatchMemo::new(input.len() as usize, vec_arena);
-        let match_any_memo = MatchAnyMemo::new(input.len() as usize, vec_arena);
         Self {
             input,
             vec_arena,
             memo,
-            match_any_memo,
         }
     }
     // Id = [a-z A-Z _][a-z A-Z _ 0-9]* \ Keyword
@@ -1430,47 +1638,80 @@ impl<'i, 'arena> LoxScanner<'i, 'arena> {
     pub fn match_terminal_41(&self, input_index: u32) -> Option<u32> {
         self.scan(&DFA_41, input_index)
     }
-    // Whether any terminal in `set` matches at `input_index`, cached by the set's memo id. The
-    // first query of a set at a position scans it; later queries return the cached bit.
+    // Returns true if any terminal in `set` matches at `input_index`. The memo of `match_token`
+    // answers for the terminals of `set` already tried at `input_index`, and only the other
+    // terminals are matched.
+    #[inline(never)]
     pub fn match_any(&mut self, set: &TerminalSet, input_index: u32) -> bool {
         debug_assert!(
-            set.id < 16,
-            "terminal set {} does not have a match_any memo id",
+            set.id < 40,
+            "terminal set {} does not have a match_any id",
             set.id,
         );
-        if self
-            .input
-            .char_at(input_index)
-            .is_some_and(|c| !MATCH_ANY_FIRST_CHARS[set.id].contains(c))
-        {
+        let c = self.input.char_at(input_index);
+        if c.is_some_and(|c| !MATCH_ANY_FIRST_CHARS[set.id].contains(c)) {
             return false;
         }
-        if let Some(matched) = self.match_any_memo.get(set.id, input_index) {
-            return matched;
-        }
-        let matched = set
-            .terminals
+        let mask = &MATCH_ANY_MASKS[set.id];
+        let (tried, matched) = self.memo.bits(input_index);
+        if mask
             .iter()
-            .any(|id| self.match_token(*id, input_index).is_some());
-        self.match_any_memo.insert(set.id, input_index, matched);
-        matched
-    }
-}
-impl Scanner for LoxScanner<'_, '_> {
-    fn match_token(&mut self, terminal_id: TerminalId, input_index: u32) -> Option<u32> {
-        if self
-            .input
-            .char_at(input_index)
-            .is_some_and(|c| !TERMINAL_FIRST_CHARS[terminal_id.index()].contains(c))
+            .zip(matched)
+            .any(|(mask, matched)| mask & matched != 0)
         {
-            return None;
+            return true;
         }
-        if let Some(lookup) = self.memo.get(terminal_id, input_index) {
-            return match lookup {
-                Lookup::Match(end) => Some(end),
-                Lookup::Fail => None,
-            };
+        let mut untried = *mask;
+        for (word, tried) in untried.iter_mut().zip(tried) {
+            *word &= !tried;
         }
+        // A terminal that cannot begin with an ASCII character `c` does not match, and its bit is
+        // cleared without matching it.
+        if let Some(c) = c.filter(char::is_ascii) {
+            for (word, first) in untried.iter_mut().zip(&FIRST_CHAR_MASKS[c as usize]) {
+                *word &= first;
+            }
+        }
+        if untried.iter().all(|&word| word == 0) {
+            return false;
+        }
+        self.match_any_untried(untried, input_index)
+    }
+    // Matches the terminals in `untried`, a bitset indexed by terminal id, at `input_index`
+    // until one matches. `match_any` calls this method for the terminals of a set that were not
+    // tried at `input_index` yet.
+    // Not inlined into `match_any`. The parser calls `match_any` very often, and many calls
+    // return after the first-character test or the bitset tests. This method needs its arguments
+    // again after each call to `match_token`, and the compiler handles that with extra
+    // instructions at the start and end of the function. Kept separate, those instructions run
+    // only when a terminal of the set was not tried yet.
+    #[inline(never)]
+    fn match_any_untried(&mut self, untried: [u64; MATCH_MEMO_WORDS], input_index: u32) -> bool {
+        for (word, &bits) in untried.iter().enumerate() {
+            let mut bits = bits;
+            while bits != 0 {
+                let id = TerminalId((word * 64) as u16 + bits.trailing_zeros() as u16);
+                bits &= bits - 1;
+                if self.match_token(id, input_index).is_some() {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+    // Matches `terminal_id` at `input_index` with its DFA and records the result in the memo.
+    // `match_token` looks up the memo and calls this method on a miss.
+    // Not inlined into `match_token`. The parser calls `match_token` very often, and most calls
+    // return after the first-character test or a memo hit. This method needs its arguments again
+    // after the DFA returns, for the memo insert, and the compiler handles that with extra
+    // instructions at the start and end of the function. Kept separate, those instructions run
+    // only on a memo miss instead of on every call.
+    #[inline(never)]
+    fn match_token_and_memoize(
+        &mut self,
+        terminal_id: TerminalId,
+        input_index: u32,
+    ) -> Option<u32> {
         let result = match terminal_id {
             TerminalId(0) => self.match_terminal_0(input_index),
             TerminalId(1) => self.match_terminal_1(input_index),
@@ -1531,6 +1772,56 @@ impl Scanner for LoxScanner<'_, '_> {
             None => self.memo.insert_fail(terminal_id, input_index),
         }
         result
+    }
+}
+impl Scanner for LoxScanner<'_, '_> {
+    #[inline(never)]
+    fn match_token(&mut self, terminal_id: TerminalId, input_index: u32) -> Option<u32> {
+        if self
+            .input
+            .char_at(input_index)
+            .is_some_and(|c| !TERMINAL_FIRST_CHARS[terminal_id.index()].contains(c))
+        {
+            return None;
+        }
+        if let Some(lookup) = self.memo.get(terminal_id, input_index) {
+            return match lookup {
+                Lookup::Match(end) => Some(end),
+                Lookup::Fail => None,
+            };
+        }
+        self.match_token_and_memoize(terminal_id, input_index)
+    }
+    // The alternatives that `prediction` predicts at `input_index`: those predicted by a
+    // terminal that matches there. The memo of `match_token` answers for the terminals already
+    // tried at `input_index`, and only the other terminals are matched. A call to `match_token`
+    // changes only the bits of its own terminal, so the copies of the bitsets stay valid.
+    #[inline]
+    fn predict<A: AlternativeSet>(&mut self, prediction: &Prediction, input_index: u32) -> A {
+        let (tried, matched) = {
+            let (tried, matched) = self.memo.bits(input_index);
+            (*tried, *matched)
+        };
+        let mut alternatives = A::default();
+        for &(terminal, alternative) in prediction.terminals_at(self.input.char_at(input_index)) {
+            let alternative = usize::from(alternative);
+            // An alternative already predicted does not need its terminal matched again.
+            if alternatives.contains(alternative) {
+                continue;
+            }
+            let (word, bit) = (terminal.index() / 64, 1u64 << (terminal.index() % 64));
+            let matches = if matched[word] & bit != 0 {
+                true
+            } else if tried[word] & bit != 0 {
+                false
+            } else {
+                self.match_token(terminal, input_index).is_some()
+            };
+            if matches {
+                alternatives.insert(alternative);
+            }
+        }
+        alternatives
     }
     fn char_at(&self, i: u32) -> Option<char> {
         self.input.char_at(i)

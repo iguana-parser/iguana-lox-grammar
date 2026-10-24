@@ -14,31 +14,27 @@ pub const VAR_DECL: NonterminalId = NonterminalId(3);
 pub const STATEMENT: NonterminalId = NonterminalId(4);
 pub const BLOCK: NonterminalId = NonterminalId(5);
 pub const PLUS_0: NonterminalId = NonterminalId(6);
-pub const OPT_0: NonterminalId = NonterminalId(7);
-pub const STAR_0: NonterminalId = NonterminalId(8);
-pub const GROUP_0: NonterminalId = NonterminalId(9);
-pub const OPT_1: NonterminalId = NonterminalId(10);
-pub const PLUS_1: NonterminalId = NonterminalId(11);
-pub const OPT_2: NonterminalId = NonterminalId(12);
-pub const STAR_1: NonterminalId = NonterminalId(13);
-pub const PLUS_2: NonterminalId = NonterminalId(14);
-pub const OPT_3: NonterminalId = NonterminalId(15);
-pub const STAR_2: NonterminalId = NonterminalId(16);
-pub const GROUP_1: NonterminalId = NonterminalId(17);
-pub const OPT_4: NonterminalId = NonterminalId(18);
-pub const ALT_0: NonterminalId = NonterminalId(19);
-pub const OPT_5: NonterminalId = NonterminalId(20);
-pub const PLUS_3: NonterminalId = NonterminalId(21);
-pub const OPT_6: NonterminalId = NonterminalId(22);
-pub const STAR_3: NonterminalId = NonterminalId(23);
-pub const START_PROGRAM: NonterminalId = NonterminalId(24);
-pub const START_DECLARATION: NonterminalId = NonterminalId(25);
-pub const START_FUNCTION: NonterminalId = NonterminalId(26);
-pub const START_VAR_DECL: NonterminalId = NonterminalId(27);
-pub const START_STATEMENT: NonterminalId = NonterminalId(28);
-pub const START_BLOCK: NonterminalId = NonterminalId(29);
-pub const START_EXPR: NonterminalId = NonterminalId(30);
-pub const EXPR: NonterminalId = NonterminalId(31);
+pub const STAR_0: NonterminalId = NonterminalId(7);
+pub const GROUP_0: NonterminalId = NonterminalId(8);
+pub const OPT_0: NonterminalId = NonterminalId(9);
+pub const PLUS_1: NonterminalId = NonterminalId(10);
+pub const STAR_1: NonterminalId = NonterminalId(11);
+pub const PLUS_2: NonterminalId = NonterminalId(12);
+pub const STAR_2: NonterminalId = NonterminalId(13);
+pub const GROUP_1: NonterminalId = NonterminalId(14);
+pub const OPT_1: NonterminalId = NonterminalId(15);
+pub const ALT_0: NonterminalId = NonterminalId(16);
+pub const OPT_2: NonterminalId = NonterminalId(17);
+pub const PLUS_3: NonterminalId = NonterminalId(18);
+pub const STAR_3: NonterminalId = NonterminalId(19);
+pub const START_PROGRAM: NonterminalId = NonterminalId(20);
+pub const START_DECLARATION: NonterminalId = NonterminalId(21);
+pub const START_FUNCTION: NonterminalId = NonterminalId(22);
+pub const START_VAR_DECL: NonterminalId = NonterminalId(23);
+pub const START_STATEMENT: NonterminalId = NonterminalId(24);
+pub const START_BLOCK: NonterminalId = NonterminalId(25);
+pub const START_EXPR: NonterminalId = NonterminalId(26);
+pub const EXPR: NonterminalId = NonterminalId(27);
 pub struct LoxGrammar;
 impl Grammar for LoxGrammar {
     type Alternatives = BitSet<1>;
@@ -73,10 +69,6 @@ impl Grammar for LoxGrammar {
             display_name: "Declaration+",
         },
         Nonterminal {
-            name: "Opt_0",
-            display_name: "Declaration+?",
-        },
-        Nonterminal {
             name: "Star_0",
             display_name: "Declaration*",
         },
@@ -85,16 +77,12 @@ impl Grammar for LoxGrammar {
             display_name: "(\"<\" Id)",
         },
         Nonterminal {
-            name: "Opt_1",
+            name: "Opt_0",
             display_name: "(\"<\" Id)?",
         },
         Nonterminal {
             name: "Plus_1",
             display_name: "Function+",
-        },
-        Nonterminal {
-            name: "Opt_2",
-            display_name: "Function+?",
         },
         Nonterminal {
             name: "Star_1",
@@ -105,10 +93,6 @@ impl Grammar for LoxGrammar {
             display_name: "{Id \",\"}+",
         },
         Nonterminal {
-            name: "Opt_3",
-            display_name: "{Id \",\"}+?",
-        },
-        Nonterminal {
             name: "Star_2",
             display_name: "{Id \",\"}*",
         },
@@ -117,7 +101,7 @@ impl Grammar for LoxGrammar {
             display_name: "(\"=\" Expr)",
         },
         Nonterminal {
-            name: "Opt_4",
+            name: "Opt_1",
             display_name: "(\"=\" Expr)?",
         },
         Nonterminal {
@@ -125,16 +109,12 @@ impl Grammar for LoxGrammar {
             display_name: "(VarDecl | Expr \";\" | \";\")",
         },
         Nonterminal {
-            name: "Opt_5",
+            name: "Opt_2",
             display_name: "Expr?",
         },
         Nonterminal {
             name: "Plus_3",
             display_name: "{Expr \",\"}+",
-        },
-        Nonterminal {
-            name: "Opt_6",
-            display_name: "{Expr \",\"}+?",
         },
         Nonterminal {
             name: "Star_3",
@@ -712,24 +692,16 @@ impl Grammar for LoxGrammar {
             position: 1,
         },
         Slot {
-            display_name: "Declaration+? : . Declaration+",
+            display_name: "Declaration* : . Declaration+",
             position: 0,
         },
         Slot {
-            display_name: "Declaration+? : Declaration+.",
+            display_name: "Declaration* : Declaration+.",
             position: 1,
         },
         Slot {
-            display_name: "Declaration+? : .",
+            display_name: "Declaration* : .",
             position: 0,
-        },
-        Slot {
-            display_name: "Declaration* : . Declaration+?",
-            position: 0,
-        },
-        Slot {
-            display_name: "Declaration* : Declaration+?.",
-            position: 1,
         },
         Slot {
             display_name: "(\"<\" Id) : . \"<\" Layout Id",
@@ -784,24 +756,16 @@ impl Grammar for LoxGrammar {
             position: 1,
         },
         Slot {
-            display_name: "Function+? : . Function+",
+            display_name: "Function* : . Function+",
             position: 0,
         },
         Slot {
-            display_name: "Function+? : Function+.",
+            display_name: "Function* : Function+.",
             position: 1,
         },
         Slot {
-            display_name: "Function+? : .",
+            display_name: "Function* : .",
             position: 0,
-        },
-        Slot {
-            display_name: "Function* : . Function+?",
-            position: 0,
-        },
-        Slot {
-            display_name: "Function* : Function+?.",
-            position: 1,
         },
         Slot {
             display_name: "{Id \",\"}+ : . {Id \",\"}+ Layout \",\" Layout Id",
@@ -836,24 +800,16 @@ impl Grammar for LoxGrammar {
             position: 1,
         },
         Slot {
-            display_name: "{Id \",\"}+? : . {Id \",\"}+",
+            display_name: "{Id \",\"}* : . {Id \",\"}+",
             position: 0,
         },
         Slot {
-            display_name: "{Id \",\"}+? : {Id \",\"}+.",
+            display_name: "{Id \",\"}* : {Id \",\"}+.",
             position: 1,
         },
         Slot {
-            display_name: "{Id \",\"}+? : .",
+            display_name: "{Id \",\"}* : .",
             position: 0,
-        },
-        Slot {
-            display_name: "{Id \",\"}* : . {Id \",\"}+?",
-            position: 0,
-        },
-        Slot {
-            display_name: "{Id \",\"}* : {Id \",\"}+?.",
-            position: 1,
         },
         Slot {
             display_name: "(\"=\" Expr) : . \"=\" Layout Expr(0)",
@@ -960,24 +916,16 @@ impl Grammar for LoxGrammar {
             position: 1,
         },
         Slot {
-            display_name: "{Expr \",\"}+? : . {Expr \",\"}+",
+            display_name: "{Expr \",\"}* : . {Expr \",\"}+",
             position: 0,
         },
         Slot {
-            display_name: "{Expr \",\"}+? : {Expr \",\"}+.",
+            display_name: "{Expr \",\"}* : {Expr \",\"}+.",
             position: 1,
         },
         Slot {
-            display_name: "{Expr \",\"}+? : .",
+            display_name: "{Expr \",\"}* : .",
             position: 0,
-        },
-        Slot {
-            display_name: "{Expr \",\"}* : . {Expr \",\"}+?",
-            position: 0,
-        },
-        Slot {
-            display_name: "{Expr \",\"}* : {Expr \",\"}+?.",
-            position: 1,
         },
         Slot {
             display_name: "Program : . Layout start:Program Layout",
@@ -1839,55 +1787,51 @@ impl Grammar for LoxGrammar {
         &[SlotId(114), SlotId(118)],
         &[SlotId(120), SlotId(122)],
         &[SlotId(123)],
-        &[SlotId(125)],
-        &[SlotId(129), SlotId(131)],
-        &[SlotId(132), SlotId(136)],
-        &[SlotId(138), SlotId(140)],
-        &[SlotId(141)],
-        &[SlotId(143), SlotId(149)],
-        &[SlotId(151), SlotId(153)],
-        &[SlotId(154)],
-        &[SlotId(156)],
-        &[SlotId(160), SlotId(162)],
-        &[SlotId(163), SlotId(165), SlotId(169)],
-        &[SlotId(171), SlotId(173)],
-        &[SlotId(174), SlotId(180)],
-        &[SlotId(182), SlotId(184)],
-        &[SlotId(185)],
+        &[SlotId(127), SlotId(129)],
+        &[SlotId(130), SlotId(134)],
+        &[SlotId(136), SlotId(138)],
+        &[SlotId(139), SlotId(145)],
+        &[SlotId(147), SlotId(149)],
+        &[SlotId(150)],
+        &[SlotId(154), SlotId(156)],
+        &[SlotId(157), SlotId(159), SlotId(163)],
+        &[SlotId(165), SlotId(167)],
+        &[SlotId(168), SlotId(174)],
+        &[SlotId(176), SlotId(178)],
+        &[SlotId(179)],
+        &[SlotId(183)],
         &[SlotId(187)],
         &[SlotId(191)],
         &[SlotId(195)],
         &[SlotId(199)],
         &[SlotId(203)],
-        &[SlotId(207)],
-        &[SlotId(211)],
         &[
-            SlotId(215),
-            SlotId(226),
-            SlotId(235),
-            SlotId(238),
-            SlotId(241),
-            SlotId(244),
-            SlotId(247),
-            SlotId(250),
-            SlotId(253),
-            SlotId(256),
-            SlotId(263),
-            SlotId(270),
-            SlotId(275),
-            SlotId(280),
-            SlotId(289),
-            SlotId(298),
-            SlotId(307),
-            SlotId(316),
-            SlotId(325),
-            SlotId(334),
-            SlotId(343),
-            SlotId(352),
-            SlotId(361),
-            SlotId(370),
-            SlotId(379),
-            SlotId(388),
+            SlotId(207),
+            SlotId(218),
+            SlotId(227),
+            SlotId(230),
+            SlotId(233),
+            SlotId(236),
+            SlotId(239),
+            SlotId(242),
+            SlotId(245),
+            SlotId(248),
+            SlotId(255),
+            SlotId(262),
+            SlotId(267),
+            SlotId(272),
+            SlotId(281),
+            SlotId(290),
+            SlotId(299),
+            SlotId(308),
+            SlotId(317),
+            SlotId(326),
+            SlotId(335),
+            SlotId(344),
+            SlotId(353),
+            SlotId(362),
+            SlotId(371),
+            SlotId(380),
         ],
     ];
     const LAYOUT_NAME: Option<&'static str> = Some("Layout");
@@ -1897,179 +1841,179 @@ impl Grammar for LoxGrammar {
     // by terminal id, serves only that.
     const SINGLE_TERMINAL_SETS: &'static [TerminalSet] = &[
         TerminalSet {
-            id: 17,
+            id: 41,
             terminals: &[TerminalId(0)],
         },
         TerminalSet {
-            id: 18,
+            id: 42,
             terminals: &[TerminalId(1)],
         },
         TerminalSet {
-            id: 19,
+            id: 43,
             terminals: &[TerminalId(2)],
         },
         TerminalSet {
-            id: 20,
+            id: 44,
             terminals: &[TerminalId(3)],
         },
         TerminalSet {
-            id: 21,
+            id: 45,
             terminals: &[TerminalId(4)],
         },
         TerminalSet {
-            id: 22,
+            id: 46,
             terminals: &[TerminalId(5)],
         },
         TerminalSet {
-            id: 23,
+            id: 47,
             terminals: &[TerminalId(6)],
         },
         TerminalSet {
-            id: 24,
+            id: 48,
             terminals: &[TerminalId(7)],
         },
         TerminalSet {
-            id: 25,
+            id: 49,
             terminals: &[TerminalId(8)],
         },
         TerminalSet {
-            id: 26,
+            id: 50,
             terminals: &[TerminalId(9)],
         },
         TerminalSet {
-            id: 27,
+            id: 51,
             terminals: &[TerminalId(10)],
         },
         TerminalSet {
-            id: 28,
+            id: 52,
             terminals: &[TerminalId(11)],
         },
         TerminalSet {
-            id: 29,
+            id: 53,
             terminals: &[TerminalId(12)],
         },
         TerminalSet {
-            id: 30,
+            id: 54,
             terminals: &[TerminalId(13)],
         },
         TerminalSet {
-            id: 31,
+            id: 55,
             terminals: &[TerminalId(14)],
         },
         TerminalSet {
-            id: 32,
+            id: 56,
             terminals: &[TerminalId(15)],
         },
         TerminalSet {
-            id: 33,
+            id: 57,
             terminals: &[TerminalId(16)],
         },
         TerminalSet {
-            id: 34,
+            id: 58,
             terminals: &[TerminalId(17)],
         },
         TerminalSet {
-            id: 35,
+            id: 59,
             terminals: &[TerminalId(18)],
         },
         TerminalSet {
-            id: 36,
+            id: 60,
             terminals: &[TerminalId(19)],
         },
         TerminalSet {
-            id: 37,
+            id: 61,
             terminals: &[TerminalId(20)],
         },
         TerminalSet {
-            id: 38,
+            id: 62,
             terminals: &[TerminalId(21)],
         },
         TerminalSet {
-            id: 39,
+            id: 63,
             terminals: &[TerminalId(22)],
         },
         TerminalSet {
-            id: 40,
+            id: 64,
             terminals: &[TerminalId(23)],
         },
         TerminalSet {
-            id: 41,
+            id: 65,
             terminals: &[TerminalId(24)],
         },
         TerminalSet {
-            id: 42,
+            id: 66,
             terminals: &[TerminalId(25)],
         },
         TerminalSet {
-            id: 43,
+            id: 67,
             terminals: &[TerminalId(26)],
         },
         TerminalSet {
-            id: 44,
+            id: 68,
             terminals: &[TerminalId(27)],
         },
         TerminalSet {
-            id: 45,
+            id: 69,
             terminals: &[TerminalId(28)],
         },
         TerminalSet {
-            id: 46,
+            id: 70,
             terminals: &[TerminalId(29)],
         },
         TerminalSet {
-            id: 47,
+            id: 71,
             terminals: &[TerminalId(30)],
         },
         TerminalSet {
-            id: 48,
+            id: 72,
             terminals: &[TerminalId(31)],
         },
         TerminalSet {
-            id: 49,
+            id: 73,
             terminals: &[TerminalId(32)],
         },
         TerminalSet {
-            id: 50,
+            id: 74,
             terminals: &[TerminalId(33)],
         },
         TerminalSet {
-            id: 51,
+            id: 75,
             terminals: &[TerminalId(34)],
         },
         TerminalSet {
-            id: 52,
+            id: 76,
             terminals: &[TerminalId(35)],
         },
         TerminalSet {
-            id: 53,
+            id: 77,
             terminals: &[TerminalId(36)],
         },
         TerminalSet {
-            id: 54,
+            id: 78,
             terminals: &[TerminalId(37)],
         },
         TerminalSet {
-            id: 55,
+            id: 79,
             terminals: &[TerminalId(38)],
         },
         TerminalSet {
-            id: 56,
+            id: 80,
             terminals: &[TerminalId(39)],
         },
         TerminalSet {
-            id: 57,
+            id: 81,
             terminals: &[TerminalId(40)],
         },
         TerminalSet {
-            id: 58,
+            id: 82,
             terminals: &[TerminalId(41)],
         },
         TerminalSet {
-            id: 59,
+            id: 83,
             terminals: &[TerminalId(42)],
         },
         TerminalSet {
-            id: 60,
+            id: 84,
             terminals: &[TerminalId(43)],
         },
     ];
@@ -2082,22 +2026,18 @@ impl Grammar for LoxGrammar {
             "Statement" => Some(STATEMENT),
             "Block" => Some(BLOCK),
             "Plus_0" => Some(PLUS_0),
-            "Opt_0" => Some(OPT_0),
             "Star_0" => Some(STAR_0),
             "Group_0" => Some(GROUP_0),
-            "Opt_1" => Some(OPT_1),
+            "Opt_0" => Some(OPT_0),
             "Plus_1" => Some(PLUS_1),
-            "Opt_2" => Some(OPT_2),
             "Star_1" => Some(STAR_1),
             "Plus_2" => Some(PLUS_2),
-            "Opt_3" => Some(OPT_3),
             "Star_2" => Some(STAR_2),
             "Group_1" => Some(GROUP_1),
-            "Opt_4" => Some(OPT_4),
+            "Opt_1" => Some(OPT_1),
             "Alt_0" => Some(ALT_0),
-            "Opt_5" => Some(OPT_5),
+            "Opt_2" => Some(OPT_2),
             "Plus_3" => Some(PLUS_3),
-            "Opt_6" => Some(OPT_6),
             "Star_3" => Some(STAR_3),
             "StartProgram" => Some(START_PROGRAM),
             "StartDeclaration" => Some(START_DECLARATION),
@@ -2146,7 +2086,7 @@ pub static FOLLOW_SET_DECLARATION: TerminalSet = TerminalSet {
         TerminalId(43),
     ],
 };
-// Declaration : . [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_1
+// Declaration : . [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_0
 // Layout "{" Layout Star_1 Layout "}" !>> { [0-9 A-Z _ a-z] }
 pub static FOLLOW_RESTRICTION_DECLARATION_ALT0_POS0: TerminalSet = TerminalSet {
     id: 2,
@@ -2219,7 +2159,7 @@ pub static FOLLOW_SET_VAR_DECL: TerminalSet = TerminalSet {
         TerminalId(43),
     ],
 };
-// VarDecl : . [0-9 A-Z _ a-z] !<< "var" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_4 Layout
+// VarDecl : . [0-9 A-Z _ a-z] !<< "var" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_1 Layout
 // ";" !>> { [0-9 A-Z _ a-z] }
 pub static FOLLOW_RESTRICTION_VAR_DECL_ALT0_POS0: TerminalSet = TerminalSet {
     id: 2,
@@ -2258,7 +2198,7 @@ pub static FOLLOW_SET_STATEMENT: TerminalSet = TerminalSet {
     ],
 };
 // Statement : . [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 Layout
-// Opt_5 Layout ";" Layout Opt_5 Layout ")" Layout Statement !>> { [0-9 A-Z _ a-z] }
+// Opt_2 Layout ";" Layout Opt_2 Layout ")" Layout Statement !>> { [0-9 A-Z _ a-z] }
 pub static FOLLOW_RESTRICTION_STATEMENT_ALT1_POS0: TerminalSet = TerminalSet {
     id: 2,
     terminals: &[TerminalId(41)],
@@ -2295,7 +2235,7 @@ pub static FOLLOW_RESTRICTION_STATEMENT_ALT4_POS0: TerminalSet = TerminalSet {
     id: 2,
     terminals: &[TerminalId(41)],
 };
-// Statement : . [0-9 A-Z _ a-z] !<< "return" !>> [0-9 A-Z _ a-z] Layout Opt_5 Layout ";" !>>
+// Statement : . [0-9 A-Z _ a-z] !<< "return" !>> [0-9 A-Z _ a-z] Layout Opt_2 Layout ";" !>>
 // { [0-9 A-Z _ a-z] }
 pub static FOLLOW_RESTRICTION_STATEMENT_ALT5_POS0: TerminalSet = TerminalSet {
     id: 2,
@@ -2438,11 +2378,6 @@ pub static FOLLOW_SET_PLUS_0: TerminalSet = TerminalSet {
         TerminalId(43),
     ],
 };
-// Opt_0 { Layout, "}", EOF }
-pub static FOLLOW_SET_OPT_0: TerminalSet = TerminalSet {
-    id: 7,
-    terminals: &[TerminalId(5), TerminalId(9), TerminalId(43)],
-};
 // Star_0 { Layout, "}", EOF }
 pub static FOLLOW_SET_STAR_0: TerminalSet = TerminalSet {
     id: 7,
@@ -2453,8 +2388,8 @@ pub static FOLLOW_SET_GROUP_0: TerminalSet = TerminalSet {
     id: 8,
     terminals: &[TerminalId(5), TerminalId(8), TerminalId(43)],
 };
-// Opt_1 { Layout, "{", EOF }
-pub static FOLLOW_SET_OPT_1: TerminalSet = TerminalSet {
+// Opt_0 { Layout, "{", EOF }
+pub static FOLLOW_SET_OPT_0: TerminalSet = TerminalSet {
     id: 8,
     terminals: &[TerminalId(5), TerminalId(8), TerminalId(43)],
 };
@@ -2462,11 +2397,6 @@ pub static FOLLOW_SET_OPT_1: TerminalSet = TerminalSet {
 pub static FOLLOW_SET_PLUS_1: TerminalSet = TerminalSet {
     id: 9,
     terminals: &[TerminalId(0), TerminalId(5), TerminalId(9), TerminalId(43)],
-};
-// Opt_2 { Layout, "}", EOF }
-pub static FOLLOW_SET_OPT_2: TerminalSet = TerminalSet {
-    id: 7,
-    terminals: &[TerminalId(5), TerminalId(9), TerminalId(43)],
 };
 // Star_1 { Layout, "}", EOF }
 pub static FOLLOW_SET_STAR_1: TerminalSet = TerminalSet {
@@ -2483,11 +2413,6 @@ pub static FOLLOW_SET_PLUS_2: TerminalSet = TerminalSet {
         TerminalId(43),
     ],
 };
-// Opt_3 { Layout, ")", EOF }
-pub static FOLLOW_SET_OPT_3: TerminalSet = TerminalSet {
-    id: 11,
-    terminals: &[TerminalId(5), TerminalId(13), TerminalId(43)],
-};
 // Star_2 { Layout, ")", EOF }
 pub static FOLLOW_SET_STAR_2: TerminalSet = TerminalSet {
     id: 11,
@@ -2498,8 +2423,8 @@ pub static FOLLOW_SET_GROUP_1: TerminalSet = TerminalSet {
     id: 12,
     terminals: &[TerminalId(5), TerminalId(16), TerminalId(43)],
 };
-// Opt_4 { Layout, ";", EOF }
-pub static FOLLOW_SET_OPT_4: TerminalSet = TerminalSet {
+// Opt_1 { Layout, ";", EOF }
+pub static FOLLOW_SET_OPT_1: TerminalSet = TerminalSet {
     id: 12,
     terminals: &[TerminalId(5), TerminalId(16), TerminalId(43)],
 };
@@ -2524,8 +2449,8 @@ pub static FOLLOW_SET_ALT_0: TerminalSet = TerminalSet {
         TerminalId(43),
     ],
 };
-// Opt_5 { Layout, ")", ";", EOF }
-pub static FOLLOW_SET_OPT_5: TerminalSet = TerminalSet {
+// Opt_2 { Layout, ")", ";", EOF }
+pub static FOLLOW_SET_OPT_2: TerminalSet = TerminalSet {
     id: 14,
     terminals: &[
         TerminalId(5),
@@ -2543,11 +2468,6 @@ pub static FOLLOW_SET_PLUS_3: TerminalSet = TerminalSet {
         TerminalId(13),
         TerminalId(43),
     ],
-};
-// Opt_6 { Layout, ")", EOF }
-pub static FOLLOW_SET_OPT_6: TerminalSet = TerminalSet {
-    id: 11,
-    terminals: &[TerminalId(5), TerminalId(13), TerminalId(43)],
 };
 // Star_3 { Layout, ")", EOF }
 pub static FOLLOW_SET_STAR_3: TerminalSet = TerminalSet {
@@ -2589,9 +2509,262 @@ pub static FOLLOW_SET_START_EXPR: TerminalSet = TerminalSet {
     id: 15,
     terminals: &[TerminalId(43)],
 };
+// Declaration : [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_0 .
+// Layout "{" Layout Star_1 Layout "}" lookahead { "{" }
+pub static RETURN_SLOT_LOOKAHEAD_DECLARATION_ALT0_POS5: TerminalSet = TerminalSet {
+    id: 16,
+    terminals: &[TerminalId(8)],
+};
+// Declaration : [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_0
+// Layout "{" Layout Star_1 . Layout "}" lookahead { "}" }
+pub static RETURN_SLOT_LOOKAHEAD_DECLARATION_ALT0_POS9: TerminalSet = TerminalSet {
+    id: 17,
+    terminals: &[TerminalId(9)],
+};
+// Function : Id Layout "(" Layout Star_2 . Layout ")" Layout Block lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_FUNCTION_ALT0_POS5: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// VarDecl : [0-9 A-Z _ a-z] !<< "var" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_1 . Layout
+// ";" lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_VAR_DECL_ALT0_POS5: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Statement : Expr(0) . Layout ";" lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT0_POS1: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 . Layout
+// Opt_2 Layout ";" Layout Opt_2 Layout ")" Layout Statement lookahead { Id, Number, String,
+// Layout, "(", ";", "true", "false", "nil", "this", "super", "!", "-" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT1_POS5: TerminalSet = TerminalSet {
+    id: 20,
+    terminals: &[
+        TerminalId(0),
+        TerminalId(3),
+        TerminalId(4),
+        TerminalId(5),
+        TerminalId(11),
+        TerminalId(16),
+        TerminalId(24),
+        TerminalId(25),
+        TerminalId(26),
+        TerminalId(27),
+        TerminalId(28),
+        TerminalId(29),
+        TerminalId(30),
+    ],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 Layout
+// Opt_2 . Layout ";" Layout Opt_2 Layout ")" Layout Statement lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT1_POS7: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 Layout
+// Opt_2 Layout ";" Layout Opt_2 . Layout ")" Layout Statement lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT1_POS11: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "if" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) .
+// Layout ")" Layout Statement !>>> Else lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT2_POS5: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "if" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) .
+// Layout ")" Layout Statement Layout [0-9 A-Z _ a-z] !<< "else" !>> [0-9 A-Z _ a-z] Layout
+// Statement lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT3_POS5: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "if" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) Layout
+// ")" Layout Statement . Layout [0-9 A-Z _ a-z] !<< "else" !>> [0-9 A-Z _ a-z] Layout
+// Statement lookahead { "else" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT3_POS9: TerminalSet = TerminalSet {
+    id: 21,
+    terminals: &[TerminalId(19)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "print" !>> [0-9 A-Z _ a-z] Layout Expr(0) . Layout ";"
+// lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT4_POS3: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "return" !>> [0-9 A-Z _ a-z] Layout Opt_2 . Layout ";"
+// lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT5_POS3: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Statement : [0-9 A-Z _ a-z] !<< "while" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) .
+// Layout ")" Layout Statement lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_STATEMENT_ALT6_POS5: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Block : "{" Layout Star_0 . Layout "}" lookahead { "}" }
+pub static RETURN_SLOT_LOOKAHEAD_BLOCK_ALT0_POS3: TerminalSet = TerminalSet {
+    id: 17,
+    terminals: &[TerminalId(9)],
+};
+// Expr(p: i32) : [9 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 9)] Layout "(" Layout
+// Star_3 Layout ")" return 0 lookahead { "(" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT0_POS2: TerminalSet = TerminalSet {
+    id: 22,
+    terminals: &[TerminalId(11)],
+};
+// Expr(p: i32) : [9 >= p] l_pr=Expr(p) [(l_pr == 0) || (l_pr >= 9)] Layout "(" Layout Star_3
+// . Layout ")" return 0 lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT0_POS7: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Expr(p: i32) : [9 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 9)] Layout "." Layout Id
+// return 0 lookahead { "." }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT1_POS2: TerminalSet = TerminalSet {
+    id: 23,
+    terminals: &[TerminalId(23)],
+};
+// Expr(p: i32) : "(" Layout Expr(0) . Layout ")" return 0 lookahead { ")" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT9_POS3: TerminalSet = TerminalSet {
+    id: 18,
+    terminals: &[TerminalId(13)],
+};
+// Expr(p: i32) : [7 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 7)] Layout "*" Layout
+// Expr(8) return 7 lookahead { "*" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT13_POS2: TerminalSet = TerminalSet {
+    id: 24,
+    terminals: &[TerminalId(31)],
+};
+// Expr(p: i32) : [7 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 7)] Layout "/" Layout
+// Expr(8) return 7 lookahead { "/" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT14_POS2: TerminalSet = TerminalSet {
+    id: 25,
+    terminals: &[TerminalId(32)],
+};
+// Expr(p: i32) : [6 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 6)] Layout "+" Layout
+// Expr(7) return 6 lookahead { "+" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT15_POS2: TerminalSet = TerminalSet {
+    id: 26,
+    terminals: &[TerminalId(33)],
+};
+// Expr(p: i32) : [6 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 6)] Layout "-" Layout
+// Expr(7) return 6 lookahead { "-" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT16_POS2: TerminalSet = TerminalSet {
+    id: 27,
+    terminals: &[TerminalId(30)],
+};
+// Expr(p: i32) : [5 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 5)] Layout ">" Layout
+// Expr(6) return 5 lookahead { ">" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT17_POS2: TerminalSet = TerminalSet {
+    id: 28,
+    terminals: &[TerminalId(34)],
+};
+// Expr(p: i32) : [5 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 5)] Layout ">=" Layout
+// Expr(6) return 5 lookahead { ">=" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT18_POS2: TerminalSet = TerminalSet {
+    id: 29,
+    terminals: &[TerminalId(35)],
+};
+// Expr(p: i32) : [5 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 5)] Layout "<" Layout
+// Expr(6) return 5 lookahead { "<" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT19_POS2: TerminalSet = TerminalSet {
+    id: 30,
+    terminals: &[TerminalId(7)],
+};
+// Expr(p: i32) : [5 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 5)] Layout "<=" Layout
+// Expr(6) return 5 lookahead { "<=" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT20_POS2: TerminalSet = TerminalSet {
+    id: 31,
+    terminals: &[TerminalId(36)],
+};
+// Expr(p: i32) : [4 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 4)] Layout "==" Layout
+// Expr(5) return 4 lookahead { "==" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT21_POS2: TerminalSet = TerminalSet {
+    id: 32,
+    terminals: &[TerminalId(37)],
+};
+// Expr(p: i32) : [4 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 4)] Layout "!=" Layout
+// Expr(5) return 4 lookahead { "!=" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT22_POS2: TerminalSet = TerminalSet {
+    id: 33,
+    terminals: &[TerminalId(38)],
+};
+// Expr(p: i32) : [3 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 3)] Layout [0-9 A-Z _ a-z]
+// !<< "and" !>> [0-9 A-Z _ a-z] Layout Expr(4) return 3 lookahead { "and" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT23_POS2: TerminalSet = TerminalSet {
+    id: 34,
+    terminals: &[TerminalId(39)],
+};
+// Expr(p: i32) : [2 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 2)] Layout [0-9 A-Z _ a-z]
+// !<< "or" !>> [0-9 A-Z _ a-z] Layout Expr(3) return 2 lookahead { "or" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT24_POS2: TerminalSet = TerminalSet {
+    id: 35,
+    terminals: &[TerminalId(40)],
+};
+// Expr(p: i32) : [1 >= p] l_pr=Expr(p) . [(l_pr == 0) || (l_pr >= 2)] Layout "=" Layout
+// Expr(1) return 1 lookahead { "=" }
+pub static RETURN_SLOT_LOOKAHEAD_EXPR_ALT25_POS2: TerminalSet = TerminalSet {
+    id: 36,
+    terminals: &[TerminalId(15)],
+};
+// Plus_0 : Plus_0 . Layout Declaration lookahead { Id, Number, String, "class", "{", "fun",
+// "(", "var", "for", "if", "print", "return", "while", "true", "false", "nil", "this",
+// "super", "!", "-" }
+pub static RETURN_SLOT_LOOKAHEAD_PLUS_0_ALT0_POS1: TerminalSet = TerminalSet {
+    id: 37,
+    terminals: &[
+        TerminalId(0),
+        TerminalId(3),
+        TerminalId(4),
+        TerminalId(6),
+        TerminalId(8),
+        TerminalId(10),
+        TerminalId(11),
+        TerminalId(14),
+        TerminalId(17),
+        TerminalId(18),
+        TerminalId(20),
+        TerminalId(21),
+        TerminalId(22),
+        TerminalId(24),
+        TerminalId(25),
+        TerminalId(26),
+        TerminalId(27),
+        TerminalId(28),
+        TerminalId(29),
+        TerminalId(30),
+    ],
+};
+// Plus_1 : Plus_1 . Layout Function lookahead { Id }
+pub static RETURN_SLOT_LOOKAHEAD_PLUS_1_ALT0_POS1: TerminalSet = TerminalSet {
+    id: 38,
+    terminals: &[TerminalId(0)],
+};
+// Plus_2 : Plus_2 . Layout "," Layout Id lookahead { "," }
+pub static RETURN_SLOT_LOOKAHEAD_PLUS_2_ALT0_POS1: TerminalSet = TerminalSet {
+    id: 39,
+    terminals: &[TerminalId(12)],
+};
+// Alt_0 : Expr(0) . Layout ";" lookahead { ";" }
+pub static RETURN_SLOT_LOOKAHEAD_ALT_0_ALT1_POS1: TerminalSet = TerminalSet {
+    id: 19,
+    terminals: &[TerminalId(16)],
+};
+// Plus_3 : Plus_3 . Layout "," Layout Expr(0) lookahead { "," }
+pub static RETURN_SLOT_LOOKAHEAD_PLUS_3_ALT0_POS1: TerminalSet = TerminalSet {
+    id: 39,
+    terminals: &[TerminalId(12)],
+};
 // Group_0 { "<" }
 pub static FIRST_SET_GROUP_0: TerminalSet = TerminalSet {
-    id: 16,
+    id: 40,
     terminals: &[TerminalId(7)],
 };
 // Program
@@ -2790,7 +2963,7 @@ pub static PREDICTION_PROGRAM: Prediction = {
     }
 };
 // Declaration
-// 0: [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_1 Layout "{"
+// 0: [0-9 A-Z _ a-z] !<< "class" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_0 Layout "{"
 // Layout Star_1 Layout "}"
 // 1: [0-9 A-Z _ a-z] !<< "fun" !>> [0-9 A-Z _ a-z] Layout Function
 // 2: VarDecl
@@ -3112,7 +3285,7 @@ pub static PREDICTION_FUNCTION: Prediction = {
     }
 };
 // VarDecl
-// 0: [0-9 A-Z _ a-z] !<< "var" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_4 Layout ";"
+// 0: [0-9 A-Z _ a-z] !<< "var" !>> [0-9 A-Z _ a-z] Layout Id Layout Opt_1 Layout ";"
 pub static PREDICTION_VAR_DECL: Prediction = {
     // "var"
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(14), 0)];
@@ -3253,14 +3426,14 @@ pub static PREDICTION_VAR_DECL: Prediction = {
 };
 // Statement
 // 0: Expr(0) Layout ";"
-// 1: [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 Layout Opt_5
-// Layout ";" Layout Opt_5 Layout ")" Layout Statement
+// 1: [0-9 A-Z _ a-z] !<< "for" !>> [0-9 A-Z _ a-z] Layout "(" Layout Alt_0 Layout Opt_2
+// Layout ";" Layout Opt_2 Layout ")" Layout Statement
 // 2: [0-9 A-Z _ a-z] !<< "if" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) Layout ")"
 // Layout Statement !>>> Else
 // 3: [0-9 A-Z _ a-z] !<< "if" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) Layout ")"
 // Layout Statement Layout [0-9 A-Z _ a-z] !<< "else" !>> [0-9 A-Z _ a-z] Layout Statement
 // 4: [0-9 A-Z _ a-z] !<< "print" !>> [0-9 A-Z _ a-z] Layout Expr(0) Layout ";"
-// 5: [0-9 A-Z _ a-z] !<< "return" !>> [0-9 A-Z _ a-z] Layout Opt_5 Layout ";"
+// 5: [0-9 A-Z _ a-z] !<< "return" !>> [0-9 A-Z _ a-z] Layout Opt_2 Layout ";"
 // 6: [0-9 A-Z _ a-z] !<< "while" !>> [0-9 A-Z _ a-z] Layout "(" Layout Expr(0) Layout ")"
 // Layout Statement
 // 7: Block
@@ -4238,10 +4411,10 @@ pub static PREDICTION_PLUS_0: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_0
+// Star_0
 // 0: Plus_0
 // 1: ()
-pub static PREDICTION_OPT_0: Prediction = {
+pub static PREDICTION_STAR_0: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, "!"
@@ -4436,207 +4609,10 @@ pub static PREDICTION_OPT_0: Prediction = {
         end_of_input: TERMINALS_20,
     }
 };
-// Star_0
-// 0: Opt_0
-pub static PREDICTION_STAR_0: Prediction = {
-    // Layout
-    const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 0)];
-    // Layout, "!"
-    const TERMINALS_2: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(29), 0)];
-    // String, Layout
-    const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(4), 0), (TerminalId(5), 0)];
-    // Layout, "("
-    const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(11), 0)];
-    // Layout, "-"
-    const TERMINALS_5: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(30), 0)];
-    // Number, Layout
-    const TERMINALS_6: &[(TerminalId, u16)] = &[(TerminalId(3), 0), (TerminalId(5), 0)];
-    // Id, Layout
-    const TERMINALS_7: &[(TerminalId, u16)] = &[(TerminalId(0), 0), (TerminalId(5), 0)];
-    // Id, Layout, "class"
-    const TERMINALS_8: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(6), 0)];
-    // Id, Layout, "fun", "for", "false"
-    const TERMINALS_9: &[(TerminalId, u16)] = &[
-        (TerminalId(0), 0),
-        (TerminalId(5), 0),
-        (TerminalId(10), 0),
-        (TerminalId(17), 0),
-        (TerminalId(25), 0),
-    ];
-    // Id, Layout, "if"
-    const TERMINALS_10: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(18), 0)];
-    // Id, Layout, "nil"
-    const TERMINALS_11: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(26), 0)];
-    // Id, Layout, "print"
-    const TERMINALS_12: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(20), 0)];
-    // Id, Layout, "return"
-    const TERMINALS_13: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(21), 0)];
-    // Id, Layout, "super"
-    const TERMINALS_14: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(28), 0)];
-    // Id, Layout, "true", "this"
-    const TERMINALS_15: &[(TerminalId, u16)] = &[
-        (TerminalId(0), 0),
-        (TerminalId(5), 0),
-        (TerminalId(24), 0),
-        (TerminalId(27), 0),
-    ];
-    // Id, Layout, "var"
-    const TERMINALS_16: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(14), 0)];
-    // Id, Layout, "while"
-    const TERMINALS_17: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(22), 0)];
-    // Layout, "{"
-    const TERMINALS_18: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(8), 0)];
-    // Layout, "}"
-    const TERMINALS_19: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(9), 0)];
-    // Layout, EOF
-    const TERMINALS_20: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(43), 0)];
-    Prediction {
-        ascii: [
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_4,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_5,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_6,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_7,
-            TERMINALS_1,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_8,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_9,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_10,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_11,
-            TERMINALS_7,
-            TERMINALS_12,
-            TERMINALS_7,
-            TERMINALS_13,
-            TERMINALS_14,
-            TERMINALS_15,
-            TERMINALS_7,
-            TERMINALS_16,
-            TERMINALS_17,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_18,
-            TERMINALS_1,
-            TERMINALS_19,
-            TERMINALS_1,
-            TERMINALS_1,
-        ],
-        non_ascii: TERMINALS_1,
-        end_of_input: TERMINALS_20,
-    }
-};
-// Opt_1
+// Opt_0
 // 0: Group_0
 // 1: ()
-pub static PREDICTION_OPT_1: Prediction = {
+pub static PREDICTION_OPT_0: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, "<"
@@ -4921,10 +4897,10 @@ pub static PREDICTION_PLUS_1: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_2
+// Star_1
 // 0: Plus_1
 // 1: ()
-pub static PREDICTION_OPT_2: Prediction = {
+pub static PREDICTION_STAR_1: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Id, Layout
@@ -4933,152 +4909,6 @@ pub static PREDICTION_OPT_2: Prediction = {
     const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(5), 1), (TerminalId(9), 1)];
     // Layout, EOF
     const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 1), (TerminalId(43), 1)];
-    Prediction {
-        ascii: [
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_2,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_1,
-        ],
-        non_ascii: TERMINALS_1,
-        end_of_input: TERMINALS_4,
-    }
-};
-// Star_1
-// 0: Opt_2
-pub static PREDICTION_STAR_1: Prediction = {
-    // Layout
-    const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 0)];
-    // Id, Layout
-    const TERMINALS_2: &[(TerminalId, u16)] = &[(TerminalId(0), 0), (TerminalId(5), 0)];
-    // Layout, "}"
-    const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(9), 0)];
-    // Layout, EOF
-    const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(43), 0)];
     Prediction {
         ascii: [
             TERMINALS_1,
@@ -5355,10 +5185,10 @@ pub static PREDICTION_PLUS_2: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_3
+// Star_2
 // 0: Plus_2
 // 1: ()
-pub static PREDICTION_OPT_3: Prediction = {
+pub static PREDICTION_STAR_2: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, ")"
@@ -5367,152 +5197,6 @@ pub static PREDICTION_OPT_3: Prediction = {
     const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(0), 0), (TerminalId(5), 1)];
     // Layout, EOF
     const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 1), (TerminalId(43), 1)];
-    Prediction {
-        ascii: [
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-        ],
-        non_ascii: TERMINALS_1,
-        end_of_input: TERMINALS_4,
-    }
-};
-// Star_2
-// 0: Opt_3
-pub static PREDICTION_STAR_2: Prediction = {
-    // Layout
-    const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 0)];
-    // Layout, ")"
-    const TERMINALS_2: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(13), 0)];
-    // Id, Layout
-    const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(0), 0), (TerminalId(5), 0)];
-    // Layout, EOF
-    const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(43), 0)];
     Prediction {
         ascii: [
             TERMINALS_1,
@@ -5788,10 +5472,10 @@ pub static PREDICTION_GROUP_1: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_4
+// Opt_1
 // 0: Group_1
 // 1: ()
-pub static PREDICTION_OPT_4: Prediction = {
+pub static PREDICTION_OPT_1: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, ";"
@@ -6100,10 +5784,10 @@ pub static PREDICTION_ALT_0: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_5
+// Opt_2
 // 0: Expr(0)
 // 1: ()
-pub static PREDICTION_OPT_5: Prediction = {
+pub static PREDICTION_OPT_2: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, "!"
@@ -6456,10 +6140,10 @@ pub static PREDICTION_PLUS_3: Prediction = {
         end_of_input: &[],
     }
 };
-// Opt_6
+// Star_3
 // 0: Plus_3
 // 1: ()
-pub static PREDICTION_OPT_6: Prediction = {
+pub static PREDICTION_STAR_3: Prediction = {
     // Layout
     const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 1)];
     // Layout, "!"
@@ -6494,178 +6178,6 @@ pub static PREDICTION_OPT_6: Prediction = {
     ];
     // Layout, EOF
     const TERMINALS_13: &[(TerminalId, u16)] = &[(TerminalId(5), 1), (TerminalId(43), 1)];
-    Prediction {
-        ascii: [
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_2,
-            TERMINALS_3,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_4,
-            TERMINALS_5,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_6,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_7,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_8,
-            TERMINALS_1,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_9,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_10,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_11,
-            TERMINALS_12,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_8,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-            TERMINALS_1,
-        ],
-        non_ascii: TERMINALS_1,
-        end_of_input: TERMINALS_13,
-    }
-};
-// Star_3
-// 0: Opt_6
-pub static PREDICTION_STAR_3: Prediction = {
-    // Layout
-    const TERMINALS_1: &[(TerminalId, u16)] = &[(TerminalId(5), 0)];
-    // Layout, "!"
-    const TERMINALS_2: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(29), 0)];
-    // String, Layout
-    const TERMINALS_3: &[(TerminalId, u16)] = &[(TerminalId(4), 0), (TerminalId(5), 0)];
-    // Layout, "("
-    const TERMINALS_4: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(11), 0)];
-    // Layout, ")"
-    const TERMINALS_5: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(13), 0)];
-    // Layout, "-"
-    const TERMINALS_6: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(30), 0)];
-    // Number, Layout
-    const TERMINALS_7: &[(TerminalId, u16)] = &[(TerminalId(3), 0), (TerminalId(5), 0)];
-    // Id, Layout
-    const TERMINALS_8: &[(TerminalId, u16)] = &[(TerminalId(0), 0), (TerminalId(5), 0)];
-    // Id, Layout, "false"
-    const TERMINALS_9: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(25), 0)];
-    // Id, Layout, "nil"
-    const TERMINALS_10: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(26), 0)];
-    // Id, Layout, "super"
-    const TERMINALS_11: &[(TerminalId, u16)] =
-        &[(TerminalId(0), 0), (TerminalId(5), 0), (TerminalId(28), 0)];
-    // Id, Layout, "true", "this"
-    const TERMINALS_12: &[(TerminalId, u16)] = &[
-        (TerminalId(0), 0),
-        (TerminalId(5), 0),
-        (TerminalId(24), 0),
-        (TerminalId(27), 0),
-    ];
-    // Layout, EOF
-    const TERMINALS_13: &[(TerminalId, u16)] = &[(TerminalId(5), 0), (TerminalId(43), 0)];
     Prediction {
         ascii: [
             TERMINALS_1,
